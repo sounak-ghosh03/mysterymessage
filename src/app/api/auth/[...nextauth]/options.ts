@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User.model";
-import { ApiResponse } from "@/types/ApiResponse";
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -38,9 +37,8 @@ export const authOptions: NextAuthOptions = {
                     if (isPasswordValid) {
                         return user;
                     } else {
-                        throw new Error("Invalid password");
+                        throw new Error("Incorrect password");
                     }
-                    return user;
                 } catch (error: any) {
                     throw new Error(error);
                 }
@@ -50,7 +48,7 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token._id = user._id?.toString();
+                token._id = user._id?.toString(); // Convert ObjectId to string
                 token.isVerified = user.isVerified;
                 token.isAcceptingMessages = user.isAcceptingMessages;
                 token.username = user.username;

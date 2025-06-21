@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -17,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-const VerifyAccount = () => {
+export default function VerifyAccount() {
     const router = useRouter();
     const params = useParams<{ username: string }>();
 
@@ -40,7 +41,11 @@ const VerifyAccount = () => {
             console.error(error);
             const axiosError = error as AxiosError<ApiResponse>;
 
-            toast.error(axiosError.response?.data.message);
+            toast("Verification Failed", {
+                description:
+                    axiosError.response?.data.message ??
+                    "An error occurred during verification Please try again.",
+            });
         }
     };
 
@@ -80,6 +85,4 @@ const VerifyAccount = () => {
             </div>
         </div>
     );
-};
-
-export default VerifyAccount;
+}

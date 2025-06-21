@@ -30,7 +30,7 @@ type MessageCardProps = {
     message: Message;
     onMessageDelete: (messageId: string) => void;
 };
-const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
+function MessageCard({ message, onMessageDelete }: MessageCardProps) {
     const handleDeleteConfirm = async () => {
         const response = await axios.delete<ApiResponse>(
             `/api/delete-message/${message.id}`
@@ -77,6 +77,6 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
             <CardContent></CardContent>
         </Card>
     );
-};
+}
 
 export default MessageCard;

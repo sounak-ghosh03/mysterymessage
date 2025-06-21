@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]/options";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User.model";
@@ -23,7 +23,8 @@ export async function POST(request: Request) {
     const userId = user._id;
     const { acceptMessages } = await request.json();
     try {
-        const updatedUser = await UserModel.findOneAndUpdate(
+        // Update the user's message acceptance status
+        const updatedUser = await UserModel.findByIdAndUpdate(
             userId,
             { isAcceptingMessages: acceptMessages },
             { new: true }
@@ -59,9 +60,11 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
     await dbConnect();
 
+    //get user from session
     const session = getServerSession(authOptions);
     const user: User = session?.user as User;
 
+    //check if user is authenticated
     if (!session || !session.user) {
         return Response.json(
             {
@@ -72,6 +75,7 @@ export async function GET(request: Request) {
         );
     }
     try {
+        //get user from database by id
         const userId = user._id;
         const foundUser = await UserModel.findById(userId);
         if (!foundUser) {
@@ -88,7 +92,6 @@ export async function GET(request: Request) {
                 success: true,
                 message: "User found",
                 isAcceptingMessages: foundUser.isAcceptingMessages,
-                foundUser,
             },
             { status: 200 }
         );

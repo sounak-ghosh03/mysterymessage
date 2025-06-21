@@ -37,15 +37,7 @@ export async function POST(req: Request) {
     }
 }
 
-
-
-
-
-
-
-
-
-//OPENAI DOES NOT PROVIDE FREE API KEY
+//OPENAI DOES NOT PROVIDE FREE API KEY SO USE GEMINI
 
 // import OpenAI from "openai";
 // import { OpenAIStream, StreamingTextResponse } from "ai";

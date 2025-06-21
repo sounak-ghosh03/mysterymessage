@@ -30,8 +30,9 @@ export async function POST(request: Request) {
         const newMessage = {
             content,
             createdAt: new Date(),
-            //sender: user._id  //if want to add sender but this app is only for messages that is anonymus
         };
+
+        //push the new message to the user's message array
         user.message.push(newMessage as Message);
         await user.save();
         return Response.json(

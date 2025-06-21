@@ -1,11 +1,14 @@
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User.model";
 import { User } from "next-auth";
 
-export async function DELETE(request: Request, { params }: { params: { messageid: string } }) {
-    const messageId = params.messageid
+export async function DELETE(
+    request: Request,
+    { params }: { params: { messageid: string } }
+) {
+    const messageId = params.messageid;
     await dbConnect();
 
     const session = getServerSession(authOptions);
@@ -21,11 +24,11 @@ export async function DELETE(request: Request, { params }: { params: { messageid
         );
     }
     try {
-        const updateResult=await UserModel.updateOne(
+        const updateResult = await UserModel.updateOne(
             { _id: user._id },
             { $pull: { messages: { _id: messageId } } }
-        )
-        if(updateResult.modifiedCount==0){
+        );
+        if (updateResult.modifiedCount === 0) {
             return Response.json(
                 {
                     success: false,
@@ -48,7 +51,6 @@ export async function DELETE(request: Request, { params }: { params: { messageid
                 message: "Error deleting message",
             },
             { status: 500 }
-        )
+        );
     }
-    
 }

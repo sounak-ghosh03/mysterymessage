@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
-const page = () => {
+export default function SignupForm() {
     const [username, setUsername] = useState("");
     const [usernameMessage, setUsernameMessage] = useState("");
     const [isCheckingUsername, setIsCheckingUsername] = useState(false);
@@ -45,9 +45,9 @@ const page = () => {
         const checkUsernameUnique = async () => {
             if (username) {
                 setIsCheckingUsername(true);
-                setUsernameMessage("");
+                setUsernameMessage(""); //clears message
                 try {
-                    const response = await axios.get(
+                    const response = await axios.get<ApiResponse>(
                         `/api/check-username-unique?username=${username}`
                     );
                     setUsernameMessage(response.data.message);
@@ -81,6 +81,8 @@ const page = () => {
         } catch (error) {
             console.log("Error in sign up", error);
             const axiosError = error as AxiosError<ApiResponse>;
+
+            //Default error message
             let errorMessage = axiosError.response?.data.message;
             ("There was a problem signing up. Please try again.");
 
@@ -96,7 +98,7 @@ const page = () => {
             <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
                 <div className="text-center">
                     <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-                        Join True Feedback
+                        Join Mystery Message
                     </h1>
                     <p className="mb-4">
                         Sign up to start your anonymous adventure
@@ -205,5 +207,4 @@ const page = () => {
             </div>
         </div>
     );
-};
-export default page;
+}

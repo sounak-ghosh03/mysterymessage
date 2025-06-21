@@ -18,8 +18,10 @@ export async function POST(request: Request) {
                 { status: 404 }
             );
         }
+
+        // Check if the verification code is valid
         const isCodeValid = user.verifyCode === code;
-        const isCodeExpired = user.verifyCodeExpiration > new Date();
+        const isCodeExpired = new Date(user.verifyCodeExpiration) > new Date();
         if (isCodeValid && isCodeExpired) {
             user.isVerified = true;
             await user.save();
@@ -31,6 +33,7 @@ export async function POST(request: Request) {
                 { status: 200 }
             );
         } else if (!isCodeValid) {
+            // Verification code is expired
             return Response.json(
                 {
                     success: false,
